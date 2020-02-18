@@ -1,2 +1,6 @@
+__pycache__/
 profile.json
+profiles/
+config.toml
+configs/
 logs/
