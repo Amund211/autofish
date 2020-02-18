@@ -1,5 +1,5 @@
 # Autofish
-Autofish is a simple python script built on [pyCraft](https://github.com/ammaraskar/pyCrafti/) to automatically fish in minecraft.
+Autofish is a simple python script built on [pyCraft](https://github.com/ammaraskar/pyCraft/) to automatically fish in minecraft.
 Autofish can connect directly to any server, and can even connect to realms.
 
 Please contact your server administrator/realm owner before using this script, as it may be considered cheating on many servers, and could ruin the gameplay experience of others.
@@ -53,8 +53,7 @@ This makes it weak to:
 
 ### Authentication
 This application handles authentication just like the vanilla minecraft client, and does not store your password.
-However, you may not always need to enter your password to authenticate.
-This is because the application stores an accesstoken, which is used instead of your password.
+You may not always need to enter your password to authenticate; this is because the application stores an accesstoken, which is used instead of your password.
 This is the same reason that you do not need to log in every time you open minecraft.
 
 When authenticating for the first time, pyCraft creates a random ```clientToken```, which means that using this application should not interfere with your other minecraft sessions.
@@ -72,5 +71,5 @@ The file should look like:
   "uuid": "some string of hex characters"
 }
 ```
-After you do this you should generate a new ```clientToken``` for your client to make sure the two clients don't interfere with each other.
-Note that this will log you out of your client.
+After you do this you should generate a new ```clientToken``` for your vanilla client to make sure the two clients don't interfere with each other.
+Note that this will log you out of your vanilla client.
