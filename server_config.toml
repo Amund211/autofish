@@ -1,0 +1,39 @@
+# All options listed are currently set to their default values
+[options]
+# Path where the profile will be read from/stored
+profile_path = "profile.json"
+
+# When true, prints every time you catch something
+print_output = false
+
+# The message sent when you join a server
+greet_message = "><(((('> AFK Fishing... ><(((('>"
+
+# The message sent when you join a server to inform other players of the sleep functionality
+sleep_message = "Type 'sleep' to log me off for 10 seconds"
+
+# The command other players must send to activate sleep-mode
+sleep_command = "sleep"
+
+# When false, ignore sleep-requests
+sleep_helper = true
+
+# Timeout in seconds
+fish_timeout = 120
+
+# Username to use when joining a server in offline mode
+username = "fisherman"
+
+
+[host]
+# Address to the server, either an ip or a hostname
+address = "127.0.0.1"
+
+# Port of the server, usually 25565
+port = "25565"
+
+# Minecraft version to connect with. Defaults to the latest avaliable release in pyCraft
+version = "1.13"
+
+# Whether or not to play in offline mode. When true, no authentication is required
+offline = false
