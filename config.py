@@ -24,22 +24,33 @@ DEFAULT_HOST = {
 }
 
 
-def read_config(path):
+def read_config(path=None, fp=None):
     """
     Reads the config.toml file at `path` and inserts default values for missing keys
 
     Raises RuntimeError if any exceptions are caught
     """
-    try:
-        with open(path, "r") as f:
-            config_text = f.read()
-    except (FileNotFoundError, IOError, PermissionError) as e:
-        raise RuntimeError(e)
+    if path is not None:
+        try:
+            with open(path, "r") as f:
+                config_text = f.read()
+        except (FileNotFoundError, IOError, PermissionError) as e:
+            raise RuntimeError(e)
+    else:
+        assert fp is not None, "No path or file passed to read_config"
+        config_text = fp.read()
 
     try:
         config = toml.loads(config_text)
     except toml.decoder.TomlDecodeError as e:
         raise RuntimeError(f"Error decoding config in {path}: " + e)
+
+    # Validate config
+    for key in ("options", "host"):
+        if key not in config:
+            config[key] = {}
+        elif type(config[key]) is not dict:
+            raise RuntimeError(f"Key '{key}' in config must be a dict")
 
     # Populate options with default values
     for key in DEFAULT_OPTIONS:

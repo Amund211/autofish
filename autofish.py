@@ -5,6 +5,7 @@ from realmip import loop_realm_address
 import sys
 from time import sleep
 from datetime import datetime
+from argparse import ArgumentParser, FileType
 
 from utils import print_timestamped
 from config import read_config
@@ -18,16 +19,34 @@ from login import (
 )
 
 
-if __name__ == "__main__":
-    config_path = "config.toml"
+def get_options():
+    parser = ArgumentParser()
+
+    parser.add_argument(
+        "config_path",
+        metavar="CONFIG",
+        help="Path to the .toml config-file",
+        type=FileType("r", encoding="UTF-8"),
+        default="config.toml",
+        nargs="?",
+    )
+
+    return parser.parse_args()
+
+
+def main():
+    options = get_options()
 
     try:
-        CONFIG = read_config(config_path)
+        CONFIG = read_config(fp=options.config_path)
     except RuntimeError as e:
         print(e)
         sys.exit(1)
+    else:
+        fp.close()
     OPTIONS = CONFIG["options"]
     HOST = CONFIG["host"]
+    sys.exit(0)
 
     # Read stored profile
     has_token, user_data = read_profile(OPTIONS["profile_path"])
@@ -121,3 +140,7 @@ if __name__ == "__main__":
             for t in timeouts:
                 print("\t" + str(t))
         sys.exit()
+
+
+if __name__ == "__main__":
+    main()
