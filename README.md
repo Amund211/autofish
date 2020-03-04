@@ -5,6 +5,9 @@ Autofish can connect directly to any server, and can even connect to realms.
 Please contact your server administrator/realm owner before using this script, as it may be considered cheating on many servers, and could ruin the gameplay experience of others.
 This software may trigger all sorts of anticheats, and so you should use it at your own risk. You have been warned.
 
+## Note
+Autofish is currently in development, and all features may not work as advertised.
+
 ## Installation
 To install autofish make sure you have:
 1. [git](https://git-scm.com/) (for cloning the repository)
