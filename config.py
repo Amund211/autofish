@@ -9,8 +9,9 @@ DEFAULT_OPTIONS = {
     "profile_path": "profile.json",
     "print_output": False,
     "greet_message": "><(((('> AFK Fishing... ><(((('>",
-    "sleep_message": "Type 'sleep' to log me off for 10 seconds",
+    "sleep_message": "Type '{sleep_command}' to log me off for {sleep_time} seconds",
     "sleep_command": "sleep",
+    "sleep_time": 10,
     "sleep_helper": True,
     "fish_timeout": 120,
 }
@@ -54,6 +55,13 @@ def read_config(path=None, fp=None):
     # Populate options with default values
     for key in DEFAULT_OPTIONS:
         config["options"][key] = config["options"].get(key, DEFAULT_OPTIONS[key])
+
+    # Extra handling for sleep_time and sleep_message
+    config["options"]["sleep_time"] = int(config["options"]["sleep_time"])
+    config["options"]["sleep_message"] = config["options"]["sleep_message"].format(
+        sleep_time=config["options"]["sleep_time"],
+        sleep_command=config["options"]["sleep_command"],
+    )
 
     # Populate host with default values
     for key in DEFAULT_HOST:

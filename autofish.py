@@ -34,6 +34,37 @@ def get_options():
     return parser.parse_args()
 
 
+def check_for_sleep(timeout, state):
+    """Wait for `timeout` seconds while checking if someone has requested to sleep"""
+
+    # Seconds the client has been offline due to a sleep-request
+    offline_time = 0
+
+    # Sleep for the fractional part of `timeout`
+    sleep(timeout % 1)
+
+    time_waited = 1
+    while time_waited <= timeout:
+        sleep(1)
+        time_waited += 1
+
+        if state["sleep_requested"]:
+            offline_time += 1
+            # Keep the loop from exiting before we have fulfilled the sleep-request
+            time_waited = -1
+
+        if offline_time > state["sleep_time"]:
+            # Sleep-request fulfilled
+            state["sleep_requested"] = False
+
+            # Hack to prevent the client from thinking the rod timed out when
+            # we were logged off
+            state["recently_cast"] = True
+
+            # Return to main loop to reconnect
+            return
+
+
 def main():
     options = get_options()
 
@@ -109,7 +140,7 @@ def main():
             while state["connected"]:
                 # Check for timeouts, fishing is handled by eventlisteners
                 state["recently_cast"] = False
-                sleep(OPTIONS["fish_timeout"])
+                check_for_sleep(OPTIONS["fish_timeout"], state)
                 if not state["recently_cast"]:
                     # Timed out
                     print_timestamped(
@@ -117,7 +148,6 @@ def main():
                         "since last catch. Using the rod once."
                     )
                     timeouts.append(datetime.now())
-                    state["recently_cast"] = True
                     use_item(state)
 
     except KeyboardInterrupt:

@@ -10,10 +10,13 @@ print_output = false
 greet_message = "><(((('> AFK Fishing... ><(((('>"
 
 # The message sent when you join a server to inform other players of the sleep functionality
-sleep_message = "Type 'sleep' to log me off for 10 seconds"
+sleep_message = "Type '{sleep_command}' to log me off for {sleep_time} seconds"
 
 # The command other players must send to activate sleep-mode
 sleep_command = "sleep"
+
+# Amount of seconds the client will log off to allow sleeping.
+sleep_time = 10
 
 # When false, ignore sleep-requests
 sleep_helper = true
