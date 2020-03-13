@@ -1,4 +1,5 @@
 from functools import partial
+import json
 
 from minecraft.networking.connection import Connection
 from minecraft.networking.packets import clientbound, serverbound
@@ -55,6 +56,33 @@ def handle_dc(pak, state):
     state["connected"] = False
 
 
+def handle_chat(pak, state):
+    data = json.loads(pak.json_data)
+
+    if pak.position == clientbound.play.ChatMessagePacket.Position.SYSTEM and (
+        data.get("translate", "") == "commands.message.display.incoming"
+        or data.get("translate", "") == "chat.type.announcement"
+    ):
+        # Whispers and such
+        name = data["with"][0]["text"]
+        message = data["with"][1]["text"]
+    elif pak.position == clientbound.play.ChatMessagePacket.Position.CHAT:
+        # Chat message
+        name = data["with"][0]["insertion"]
+        message = data["with"][1]
+    else:
+        return
+
+    if message != state["sleep_command"]:
+        return
+
+    print_timestamped("Sleep requested by " + name)
+
+    # Disconnected from server - restart connection
+    state["connection"].disconnect(immediate=True)
+    state["connected"] = False
+
+
 def handle_exception(exc, sysstat, state):
     """Handle exceptions in the connection"""
     if isinstance(exc, KeyboardInterrupt):
@@ -87,6 +115,12 @@ def setup_connection(address, port, version, auth_token, state, username=None):
     connection.register_packet_listener(
         partial(handle_sound_play, state=state), clientbound.play.SoundEffectPacket
     )
+
+    if state["sleep_helper"]:
+        # Disconnect for a while when people need to sleep
+        connection.register_packet_listener(
+            partial(handle_chat, state=state), clientbound.play.ChatMessagePacket
+        )
 
     # Handle disconnects
     connection.register_packet_listener(

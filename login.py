@@ -131,7 +131,7 @@ def update_profile(profile_path, user_data, auth_token):
         pro_file.write(json_data)
 
 
-def get_host_address(host, auth_token):
+def get_host_address(host):
     if host["realm"]:
         if "realm_name" not in host:
             raise RuntimeError("Error in host config: missing 'realm_name'")

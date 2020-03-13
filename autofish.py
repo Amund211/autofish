@@ -42,11 +42,9 @@ def main():
     except RuntimeError as e:
         print(e)
         sys.exit(1)
-    else:
-        fp.close()
+
     OPTIONS = CONFIG["options"]
     HOST = CONFIG["host"]
-    sys.exit(0)
 
     # Read stored profile
     has_token, user_data = read_profile(OPTIONS["profile_path"])
@@ -65,7 +63,7 @@ def main():
         update_profile(OPTIONS["profile_path"], user_data, auth_token)
     else:
         print("Playing in offline mode - skipping authentication")
-        if OPTIONS["username"] is None:
+        if OPTIONS.get("username", None) is None:
             OPTIONS["username"] = input("What username do you want to play with? ")
         auth_token = None
 
@@ -86,7 +84,7 @@ def main():
         # Reconnect indefinitely
         while True:
             try:
-                address, port = get_host_address(HOST, realm_name)
+                address, port = get_host_address(HOST)
             except RuntimeError as e:
                 print(e)
                 sys.exit(1)

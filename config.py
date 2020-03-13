@@ -13,7 +13,6 @@ DEFAULT_OPTIONS = {
     "sleep_command": "sleep",
     "sleep_helper": True,
     "fish_timeout": 120,
-    "username": "fisherman",
 }
 
 DEFAULT_HOST = {
