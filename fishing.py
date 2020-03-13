@@ -21,14 +21,16 @@ def handle_join_game(pak, state):
     use_item(state)
 
     # Greet the server
-    greet_packet = serverbound.play.ChatPacket()
-    greet_packet.message = state["greet_message"]
-    state["connection"].write_packet(greet_packet)
+    if state["greet_message"] != "" and state["greet_message"] is not None:
+        greet_packet = serverbound.play.ChatPacket()
+        greet_packet.message = state["greet_message"]
+        state["connection"].write_packet(greet_packet)
 
     # Inform the server of the sleep command
-    sleep_packet = serverbound.play.ChatPacket()
-    sleep_packet.message = state["sleep_message"]
-    state["connection"].write_packet(sleep_packet)
+    if state["sleep_helper"]:
+        sleep_packet = serverbound.play.ChatPacket()
+        sleep_packet.message = state["sleep_message"]
+        state["connection"].write_packet(sleep_packet)
 
 
 def handle_sound_play(pak, state):

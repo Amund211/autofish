@@ -6,7 +6,7 @@ profile_path = "profile.json"
 # When true, prints every time you catch something
 print_output = false
 
-# The message sent when you join a server
+# The message sent when you join a server. Set to an empty string to disable.
 greet_message = "><(((('> AFK Fishing... ><(((('>"
 
 # The message sent when you join a server to inform other players of the sleep functionality
