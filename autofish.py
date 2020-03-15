@@ -92,11 +92,13 @@ def main():
 
         # Update profile and write to disk
         update_profile(OPTIONS["profile_path"], user_data, auth_token)
+        username = auth_token.profile.name
     else:
         print("Playing in offline mode - skipping authentication")
         if OPTIONS.get("username", None) is None:
             OPTIONS["username"] = input("What username do you want to play with? ")
         auth_token = None
+        username = OPTIONS["username"]
 
     # Program state
     start_time = datetime.now()
@@ -105,6 +107,7 @@ def main():
     state = {
         "amount_caught": 0,
         "recently_cast": False,
+        "sleep_requested": False,
         "connection": None,
         "connected": False,
     }
@@ -127,7 +130,7 @@ def main():
                 version=HOST["version"],
                 auth_token=auth_token,
                 state=state,
-                username=OPTIONS["username"],
+                username=username,
             )
             try:
                 state["connection"].connect()

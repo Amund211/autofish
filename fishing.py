@@ -80,7 +80,10 @@ def handle_chat(pak, state):
 
     print_timestamped("Sleep requested by " + name)
 
-    # Disconnected from server - restart connection
+    # Notify main loop that sleep has been requested
+    state["sleep_requested"] = True
+
+    # Disconnected from server
     state["connection"].disconnect(immediate=True)
     state["connected"] = False
 
