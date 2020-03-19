@@ -8,6 +8,16 @@ This software may trigger all sorts of anticheats, and so you should use it at y
 ## Note
 Autofish is currently in development, and all features may not work as advertised.
 
+The id of the sound that plays when you have caught a fish changes between versions, the script is currently configured to fish on version 1.15.x.
+If you wish to fish on a different version you need to find the sound id for that version, and replace the old one in the function `handle_sound_play` in `fishing.py`.
+To find the correct id visit <https://pokechu22.github.io/Burger/VERSION.html#sounds:entity.fishing_bobber.splash>, where you replace VERSION with the name of the version you want to play on.
+
+Examples:
+- <https://pokechu22.github.io/Burger/1.15.2.html#sounds:entity.fishing_bobber.splash>
+- <https://pokechu22.github.io/Burger/20w12a.html#sounds:entity.fishing_bobber.splash>
+
+This is temporary, and an automatic solution is being worked on.
+
 ## Installation
 To install autofish make sure you have:
 1. [git](https://git-scm.com/) (for cloning the repository)
