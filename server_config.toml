@@ -24,9 +24,6 @@ sleep_helper = true
 # Timeout in seconds
 fish_timeout = 120
 
-# Username to use when joining a server in offline mode
-username = "fisherman"
-
 
 [host]
 # Address to the server, either an ip or a hostname
