@@ -33,5 +33,5 @@ realm = true
 realm_name = "my realm"
 
 # Minecraft version to connect with. Defaults to the latest avaliable release in pyCraft
-version = "1.13"
+version = "1.15.2"
 
