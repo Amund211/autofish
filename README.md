@@ -18,6 +18,15 @@ Examples:
 
 This is temporary, and an automatic solution is being worked on.
 
+## Nerf and legitimacy
+Starting with version 20w12a, which is a 1.16 snapshot, afk fish farms have been nerfed.
+To be be eligible to catch treasure in these versions, it is required that the bobber be surrounded by non-solid blocks such as air, water, waterlogged blocks, etc. in a 5x5x5 cube centered on the bobber, at all times.
+To use this script effectively in these versions you could, for example, stand on a block three blocks above a deep and wide pool of water, and face straight down when fishing.
+
+Originally, this script was intended to be a way of "using" an afk fish farm on low power devices, or without the graphical interface.
+This gave no in-game advantage compared to an actual fish farm, and would arguably make for a better gameplay experience for other players, since they could request to sleep.
+With this change, however, the script is doing something which is impossible without the attention of a player; giving an advantage over completely vanilla players.
+
 ## Installation
 To install autofish make sure you have:
 1. [git](https://git-scm.com/) (for cloning the repository)
