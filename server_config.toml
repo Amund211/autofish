@@ -31,12 +31,14 @@ fish_timeout = 120
 
 [host]
 # Address to the server, either an ip or a hostname
+# This option does NOT have a default
 address = "127.0.0.1"
 
 # Port of the server, usually 25565
 port = "25565"
 
-# Minecraft version to connect with. Defaults to the latest avaliable release in pyCraft
+# Minecraft version to connect with.
+# Defaults to the latest avaliable release in pyCraft
 version = "1.15.2"
 
 # Whether or not to play in offline mode. When true, no authentication is required

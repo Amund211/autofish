@@ -27,11 +27,12 @@ fish_timeout = 120
 
 [host]
 # Set to true if you wish to connect to a realm
+# Defaults to false
 realm = true
 
 # The name of the realm
+# This option does NOT have a default
 realm_name = "my realm"
 
 # Minecraft version to connect with. Defaults to the latest avaliable release in pyCraft
 version = "1.15.2"
-
