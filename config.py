@@ -43,7 +43,7 @@ def read_config(path=None, fp=None):
     try:
         config = toml.loads(config_text)
     except toml.decoder.TomlDecodeError as e:
-        raise RuntimeError(f"Error decoding config in {path}: " + e)
+        raise RuntimeError(f"Error decoding config in {path or fp.name}: " + e)
 
     # Validate config
     for key in ("options", "host"):
