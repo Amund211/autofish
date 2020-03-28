@@ -72,6 +72,8 @@ def main():
     except RuntimeError as e:
         print(e)
         sys.exit(1)
+    finally:
+        options.config.close()
 
     OPTIONS = CONFIG["options"]
     HOST = CONFIG["host"]
