@@ -23,12 +23,11 @@ def get_options():
     parser = ArgumentParser()
 
     parser.add_argument(
-        "config_path",
-        metavar="CONFIG",
+        "-c",
+        "--config",
         help="Path to the .toml config-file",
         type=FileType("r", encoding="UTF-8"),
         default="config.toml",
-        nargs="?",
     )
 
     return parser.parse_args()
@@ -69,7 +68,7 @@ def main():
     options = get_options()
 
     try:
-        CONFIG = read_config(fp=options.config_path)
+        CONFIG = read_config(fp=options.config)
     except RuntimeError as e:
         print(e)
         sys.exit(1)
