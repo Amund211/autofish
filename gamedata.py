@@ -15,6 +15,35 @@ from minecraft import SUPPORTED_MINECRAFT_VERSIONS
 
 BURGER_ENDPOINT = "https://pokechu22.github.io/Burger/{version}.json"
 
+BOBBER_SPLASH_SOUND_IDS = {
+    "1.9": 140,
+    "1.9.1": 140,
+    "1.9.2": 140,
+    "1.9.3": 140,
+    "1.9.4": 140,
+    "1.10": 141,
+    "1.10.1": 141,
+    "1.10.2": 141,
+    "1.11": 143,
+    "1.11.1": 143,
+    "1.11.2": 143,
+    "1.12": 153,
+    "1.12.1": 153,
+    "1.12.2": 153,
+    "1.12": 153,
+    "1.13": 184,
+    "1.13.1": 184,
+    "1.13.2": 184,
+    "1.14": 62,
+    "1.14.1": 62,
+    "1.14.2": 62,
+    "1.14.3": 62,
+    "1.14.4": 62,
+    "1.15": 73,
+    "1.15.1": 73,
+    "1.15.2": 73,
+}
+
 
 class Version:
     """
@@ -111,6 +140,10 @@ def get_bobber_splash_id(version, fp):
             f"Version {version} not supported. If you're really lucky, it might work with {latest_supported_version}."
         )
         sys.exit(1)
+
+    # Use hard coded sound ids
+    if version in BOBBER_SPLASH_SOUND_IDS:
+        return BOBBER_SPLASH_SOUND_IDS[version]
 
     # Read stored cache
     try:
