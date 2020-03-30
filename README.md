@@ -5,19 +5,6 @@ Autofish can connect directly to any server, and can even connect to realms.
 Please contact your server administrator/realm owner before using this script, as it may be considered cheating on many servers, and could ruin the gameplay experience of others.
 This software may trigger all sorts of anticheats, and so you should use it at your own risk. You have been warned.
 
-## Note
-Autofish is currently in development, and all features may not work as advertised.
-
-The id of the sound that plays when you have caught a fish changes between versions, the script is currently configured to fish on version 1.15.x.
-If you wish to fish on a different version you need to find the sound id for that version, and replace the old one in the function `handle_sound_play` in `fishing.py`.
-To find the correct id visit <https://pokechu22.github.io/Burger/VERSION.html#sounds:entity.fishing_bobber.splash>, where you replace VERSION with the name of the version you want to play on.
-
-Examples:
-- <https://pokechu22.github.io/Burger/1.15.2.html#sounds:entity.fishing_bobber.splash>
-- <https://pokechu22.github.io/Burger/20w12a.html#sounds:entity.fishing_bobber.splash>
-
-This is temporary, and an automatic solution is being worked on.
-
 ## Nerf and legitimacy
 Starting with version 20w12a, which is a 1.16 snapshot, afk fish farms have been nerfed.
 To be be eligible to catch treasure in these versions, it is required that the bobber be surrounded by non-solid blocks such as air, water, waterlogged blocks, etc. in a 5x5x5 cube centered on the bobber, at all times.

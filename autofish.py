@@ -7,6 +7,7 @@ from time import sleep
 
 from config import read_config
 from fishing import setup_connection, use_item
+from gamedata import get_bobber_splash_id
 from login import (
     authenticate_user,
     create_auth_token,
@@ -27,6 +28,14 @@ def get_options():
         help="Path to the .toml config-file",
         type=FileType("r", encoding="UTF-8"),
         default="config.toml",
+    )
+
+    parser.add_argument(
+        "-g",
+        "--gamedata",
+        help="Path to the .json gamedata cachefile",
+        type=FileType("a+", encoding="UTF-8"),
+        default="gamedata.json",
     )
 
     return parser.parse_args()
@@ -77,6 +86,9 @@ def main():
     OPTIONS = CONFIG["options"]
     HOST = CONFIG["host"]
 
+    # Get sound id and close file pointer
+    splash_id = get_bobber_splash_id(HOST["version"], fp=options.gamedata)
+
     # Read stored profile
     has_token, user_data = read_profile(OPTIONS["profile_path"])
 
@@ -110,6 +122,7 @@ def main():
         "sleep_requested": False,
         "connection": None,
         "connected": False,
+        "bobber_splash_id": splash_id,
     }
 
     state.update(OPTIONS)

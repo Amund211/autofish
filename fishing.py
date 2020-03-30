@@ -33,9 +33,7 @@ def handle_join_game(pak, state):
 
 
 def handle_sound_play(pak, state):
-    # https://pokechu22.github.io/Burger/1.15.2.html#sounds:entity.fishing_bobber.splash
-    # 73 = Bobber down / hook splash
-    if pak.sound_id != 73:
+    if pak.sound_id != state["bobber_splash_id"]:
         return
 
     # Reel in and cast
