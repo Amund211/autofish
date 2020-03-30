@@ -1,7 +1,8 @@
 import sys
+
 import requests
 
-from utils import print_timestamped, get_JSON, error_msg
+from utils import error_msg, get_JSON, print_timestamped
 
 REALMS_ENDPOINT = "https://pc.realms.minecraft.net"
 

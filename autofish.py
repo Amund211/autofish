@@ -1,22 +1,21 @@
 #! /usr/bin/env python3
 
-from realmip import loop_realm_address
-
 import sys
-from time import sleep
-from datetime import datetime
 from argparse import ArgumentParser, FileType
+from datetime import datetime
+from time import sleep
 
-from utils import print_timestamped
 from config import read_config
 from fishing import setup_connection, use_item
 from login import (
-    read_profile,
-    create_auth_token,
     authenticate_user,
-    update_profile,
+    create_auth_token,
     get_host_address,
+    read_profile,
+    update_profile,
 )
+from realmip import loop_realm_address
+from utils import print_timestamped
 
 
 def get_options():

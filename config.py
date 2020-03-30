@@ -2,7 +2,6 @@ import toml
 
 from minecraft import RELEASE_MINECRAFT_VERSIONS
 
-
 LATEST_VERSION = max(RELEASE_MINECRAFT_VERSIONS.items(), key=lambda x: x[1])[0]
 
 DEFAULT_OPTIONS = {
