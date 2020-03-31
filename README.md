@@ -46,13 +46,6 @@ To start fishing you need to:
 
 If you see timeouts in the console output, this may indicate that you can't reach the water.
 
-### Arguments
-When run without arguments ```autofish.py``` looks for a configuration-file named ```config.toml``` in the current directory.
-To specify a different configuration, pass the path to this file as the first argument i.e.
-```shell
-pipenv run python autofish.py /path/to/config.toml
-```
-
 ## Notes
 ### Principle
 The script reels in the rod when it hears the bobber splash sound played on the server.
