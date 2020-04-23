@@ -46,6 +46,8 @@ To start fishing you need to:
 
 If you see timeouts in the console output, this may indicate that you can't reach the water.
 
+To log out and stop fishing; abort the script with <kbd>Ctrl</kbd>+<kbd>C</kbd>.
+
 ## Notes
 ### Version support
 Minecraft's network protocol changes with almost every new version of minecraft.
