@@ -33,9 +33,10 @@ pipenv sync
 Copy one of the configuration-files to ```config.toml``` and edit it to your needs.
 
 ## Usage
-To properly run this application you must make sure that the script is running under the virtual environment. A simple way of doing this is to run
+To properly run this application you must make sure that the script is running under the virtual environment.
+A simple way of doing this is to run
 ```shell
-pipenv run python autofish.py
+pipenv run fish
 ```
 
 To start fishing you need to:

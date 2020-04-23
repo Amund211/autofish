@@ -12,3 +12,6 @@ toml = "*"
 
 [requires]
 python_version = "3.8"
+
+[scripts]
+fish = "python autofish.py"
