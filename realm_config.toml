@@ -27,6 +27,9 @@
 ### succeeded will be interrupted, while 120 seconds yields a 0.8% chance.
 #fish_timeout = 60
 
+### Tolerance for durability-loss on the fishing rod before logging out to save it
+#durability_threshold = 30
+
 
 [host]
 ### Set to true if you wish to connect to a realm

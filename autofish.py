@@ -116,6 +116,10 @@ def main():
     start_time = datetime.now()
     timeouts = []
 
+    # Stores the potential durability that has been taken off the rod due to timeouts
+    # minus the durability recovered by mending
+    durability_counter = 0
+
     state = {
         "amount_caught": 0,
         "recently_cast": False,
@@ -159,12 +163,29 @@ def main():
                 check_for_sleep(OPTIONS["fish_timeout"], state)
                 if not state["recently_cast"]:
                     # Timed out
+                    if durability_count >= OPTIONS["durability_threshold"]:
+                        # Log out to save the rod
+                        print_timestamped(
+                            f"Too many timeouts; rod has, at worst, taken ~{durability_count} "
+                            "points of durability. Logging out to save it."
+                        )
+                        # Ugly hack to display results of session before exiting
+                        raise KeyboardInterrupt
+
                     print_timestamped(
                         f"Timed out; more than {OPTIONS['fish_timeout']} seconds "
                         "since last catch. Using the rod once."
                     )
                     timeouts.append(datetime.now())
                     use_item(state)
+
+                    # Reeling in a mob costs 5 durability
+                    # This can be done at most every other use of the rod
+                    durability_count += 5 / 2
+                else:
+                    # Fishing grants 1-6 exp which each gives 2 durability
+                    # The rod cannot be repaired past fully repaired
+                    durability_count = max(0, durability_count - 2)
 
     except KeyboardInterrupt:
         print_timestamped("Ending session")
