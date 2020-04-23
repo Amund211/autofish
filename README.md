@@ -47,6 +47,14 @@ To start fishing you need to:
 If you see timeouts in the console output, this may indicate that you can't reach the water.
 
 ## Notes
+### Version support
+Minecraft's network protocol changes with almost every new version of minecraft.
+This script uses the implementation of the protocol from [pyCraft](https://github.com/ammaraskar/pyCraft/), and therefore only supports the versions that pyCraft supports.
+A list of supported versions can be found [here](https://github.com/ammaraskar/pyCraft#supported-minecraft-versions).
+
+This script only uses a relatively small subset of the network protocol, so new protocol versions may not present any relevant changes.
+In this case you are to connect to a server using an earlier version; i. e. connecting to a `20w10a` server using the `1.15.2` protocol.
+
 ### Principle
 The script reels in the rod when it hears the bobber splash sound played on the server.
 This makes it weak to:
