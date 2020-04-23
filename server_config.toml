@@ -21,8 +21,11 @@
 ### When false, ignore sleep-requests
 #sleep_helper = true
 
-### Timeout in seconds
-#fish_timeout = 120
+### Time in seconds before the script assumes something has gone wrong and attempts to cast again
+### In versions 1.7.2 and greater this should be at least 30 seconds
+### In versions 1.2.0 - 1.7.1, 60 seconds yields a 9% chance that an attempt that would have
+### succeeded will be interrupted, while 120 seconds yields a 0.8% chance.
+#fish_timeout = 60
 
 ### Username to use when joining a server in offline mode
 ### This option does NOT have a default

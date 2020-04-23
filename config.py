@@ -12,7 +12,7 @@ DEFAULT_OPTIONS = {
     "sleep_command": "sleep",
     "sleep_time": 10,
     "sleep_helper": True,
-    "fish_timeout": 120,
+    "fish_timeout": 60,
 }
 
 DEFAULT_HOST = {
