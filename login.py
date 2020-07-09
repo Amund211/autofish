@@ -9,7 +9,7 @@ from realmip import loop_realm_address
 
 def get_credentials(username=None):
     if not username:
-        username = input("Username: ")
+        username = input("Mojang username (probably your email): ")
     return username, getpass.getpass(f"Password for {username}: ")
 
 
