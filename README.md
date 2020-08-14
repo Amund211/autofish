@@ -59,7 +59,7 @@ If this fails you may have edited some files locally.
 To discard these changes:
 ```shell
 git fetch
-git reset --hard origin master
+git reset --hard origin/master
 ```
 Note that this will not change untracked files, like `config.toml`, `profile.json`, or any other files you might have put there.
 
