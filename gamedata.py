@@ -109,7 +109,9 @@ def _loop_download_sound_id(version, sound):
             if e.response.status_code == 404:
                 # No data found
                 print(
-                    f"The data for version {version} does not exist. Check that you entered the version correctly, or wait for the data to be updated."
+                    f"The data for version {version} does not exist. "
+                    f"Check that you entered the version correctly, "
+                    "or wait for the data to be updated."
                 )
                 sys.exit(1)
             else:
@@ -133,11 +135,12 @@ def get_bobber_splash_id(version, fp):
 
     if version not in SUPPORTED_MINECRAFT_VERSIONS:
         latest_supported_version = max(
-            SUPPORTED_MONECRAFT_VERSIONS.values(),
+            SUPPORTED_MINECRAFT_VERSIONS.values(),
             key=lambda pair: pair[1],  # Get protocol version
         )[0]
         print(
-            f"Version {version} not supported. If you're really lucky, it might work with {latest_supported_version}."
+            f"Version {version} not supported. If you're really lucky, "
+            f"it might work with {latest_supported_version}."
         )
         sys.exit(1)
 

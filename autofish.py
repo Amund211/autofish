@@ -15,7 +15,6 @@ from login import (
     read_profile,
     update_profile,
 )
-from realmip import loop_realm_address
 from utils import print_timestamped
 
 
@@ -118,7 +117,7 @@ def main():
 
     # Stores the potential durability that has been taken off the rod due to timeouts
     # minus the durability recovered by mending
-    durability_counter = 0
+    durability_count = 0
 
     state = {
         "amount_caught": 0,
@@ -135,7 +134,7 @@ def main():
         # Reconnect indefinitely
         while True:
             try:
-                address, port = get_host_address(HOST)
+                address, port = get_host_address(HOST, auth_token)
             except RuntimeError as e:
                 print(e)
                 sys.exit(1)

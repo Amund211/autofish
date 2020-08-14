@@ -1,8 +1,10 @@
 import sys
+from time import sleep
+from json import JSONDecodeError
 
 import requests
 
-from utils import error_msg, get_JSON, print_timestamped
+from utils import error_msg, print_timestamped
 
 REALMS_ENDPOINT = "https://pc.realms.minecraft.net"
 
@@ -24,12 +26,12 @@ def get_realm_address(name, uuid, access_token, realm_name, realms=REALMS_ENDPOI
     # Requesting list of realms
     worlds_response = requests.get(realms + "/worlds", cookies=sid_cookie)
     if not worlds_response:
-        raise RuntimeError(error_msg(join_response) + "\nAre you authenticated?")
+        raise RuntimeError(error_msg(worlds_response) + "\nAre you authenticated?")
 
-    worlds_data = get_JSON(worlds_response)
     try:
+        worlds_data = worlds_response.json()
         worlds = worlds_data["servers"]
-    except KeyError:
+    except (KeyError, JSONDecodeError):
         raise KeyError(
             "Key 'servers' not found in response from /worlds endpoint."
             f"Response data: '{worlds_data}'"
@@ -49,10 +51,10 @@ def get_realm_address(name, uuid, access_token, realm_name, realms=REALMS_ENDPOI
     if not join_response:
         raise RuntimeError(error_msg(join_response) + "\nIs the realm active?")
 
-    realm_data = get_JSON(join_response)
     try:
+        realm_data = join_response.json()
         ip = realm_data["address"]
-    except KeyError:
+    except (KeyError, JSONDecodeError):
         raise KeyError(
             "Key 'address' not found in realm data." f"Response data: '{realm_data}'"
         )

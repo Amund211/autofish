@@ -1,17 +1,8 @@
 from datetime import datetime
-from json import JSONDecodeError
 
 
 def print_timestamped(string):
     print(str(datetime.now()).ljust(30) + "\t" + string)
-
-
-def get_JSON(response):
-    try:
-        data = response.json()
-    except JSONDecodeError as e:
-        error(request)
-    return data
 
 
 def error_msg(response):

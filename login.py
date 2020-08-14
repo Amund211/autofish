@@ -130,7 +130,7 @@ def update_profile(profile_path, user_data, auth_token):
         pro_file.write(json_data)
 
 
-def get_host_address(host):
+def get_host_address(host, auth_token):
     if host["realm"]:
         if "realm_name" not in host:
             raise RuntimeError("Error in host config: missing 'realm_name'")
@@ -138,7 +138,7 @@ def get_host_address(host):
             raise RuntimeError(
                 "Error in host config: cannot connect to realm in offline mode"
             )
-        return loop_realm_address(auth_token, realm_name)
+        return loop_realm_address(auth_token, host["realm_name"])
 
     if "address" not in host:
         raise RuntimeError("Error in host config: missing 'address'")
