@@ -135,7 +135,7 @@ def get_bobber_splash_id(version, fp):
 
     if version not in SUPPORTED_MINECRAFT_VERSIONS:
         latest_supported_version = max(
-            SUPPORTED_MINECRAFT_VERSIONS.values(),
+            SUPPORTED_MINECRAFT_VERSIONS.items(),
             key=lambda pair: pair[1],  # Get protocol version
         )[0]
         print(
