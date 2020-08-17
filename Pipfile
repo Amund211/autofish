@@ -6,7 +6,7 @@ verify_ssl = true
 [dev-packages]
 
 [packages]
-minecraft = {editable = true,git = "https://github.com/Amund211/pyCraft",egg = "minecraft",ref = "stable"}
+pycraft = {editable = true, git = "https://github.com/ammaraskar/pyCraft"}
 requests = "*"
 toml = "*"
 
