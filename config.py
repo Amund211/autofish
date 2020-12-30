@@ -1,8 +1,6 @@
 import toml
 
-from minecraft import RELEASE_MINECRAFT_VERSIONS
-
-LATEST_VERSION = max(RELEASE_MINECRAFT_VERSIONS.items(), key=lambda x: x[1])[0]
+from versions import LATEST_RELEASE_VERSION
 
 DEFAULT_OPTIONS = {
     "profile_path": "profile.json",
@@ -19,7 +17,7 @@ DEFAULT_OPTIONS = {
 DEFAULT_HOST = {
     "realm": False,
     "port": "25565",
-    "version": LATEST_VERSION,
+    "version": LATEST_RELEASE_VERSION,
     "offline": False,
 }
 

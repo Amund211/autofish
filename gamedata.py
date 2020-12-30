@@ -11,7 +11,7 @@ from time import sleep
 
 import requests
 
-from minecraft import SUPPORTED_MINECRAFT_VERSIONS
+from versions import LATEST_VERSION, Version, is_supported
 
 BURGER_ENDPOINT = "https://pokechu22.github.io/Burger/{version}.json"
 
@@ -43,40 +43,6 @@ BOBBER_SPLASH_SOUND_IDS = {
     "1.15.1": 73,
     "1.15.2": 73,
 }
-
-
-class Version:
-    """
-    Class that implements a partial ordering on minecraft versions
-    using the protocol version.
-    """
-
-    def __init__(self, version):
-        self.version = version
-
-    @property
-    def protocol(self):
-        return SUPPORTED_MINECRAFT_VERSIONS[self.version]
-
-    def __lt__(self, other):
-        return self.protocol < other.protocol
-
-    def __le__(self, other):
-        return self.protocol <= other.protocol
-
-    def __eq__(self, other):
-        # Handle both Version instances and strings
-        return self.version == getattr(other, "version", other)
-
-    def __ne__(self, other):
-        # Handle both Version instances and strings
-        return self.version != getattr(other, "version", other)
-
-    def __gt__(self, other):
-        return self.protocol > other.protocol
-
-    def __ge__(self, other):
-        return self.protocol >= other.protocol
 
 
 def _write_cache(cache, fp):
@@ -133,14 +99,10 @@ def get_bobber_splash_id(version, fp):
     On error prints and exits.
     """
 
-    if version not in SUPPORTED_MINECRAFT_VERSIONS:
-        latest_supported_version = max(
-            SUPPORTED_MINECRAFT_VERSIONS.items(),
-            key=lambda pair: pair[1],  # Get protocol version
-        )[0]
+    if not is_supported(version):
         print(
             f"Version {version} not supported. If you're really lucky, "
-            f"it might work with {latest_supported_version}."
+            f"it might work with {LATEST_VERSION}."
         )
         sys.exit(1)
 
