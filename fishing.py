@@ -3,6 +3,7 @@ from functools import partial
 
 from minecraft.networking.connection import Connection
 from minecraft.networking.packets import clientbound, serverbound
+
 from utils import print_timestamped
 
 

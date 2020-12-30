@@ -1,6 +1,6 @@
 import sys
-from time import sleep
 from json import JSONDecodeError
+from time import sleep
 
 import requests
 
