@@ -4,7 +4,7 @@ from time import sleep
 
 import requests
 
-from utils import error_msg, print_timestamped
+from autofish.utils import error_msg, print_timestamped
 
 REALMS_ENDPOINT = "https://pc.realms.minecraft.net"
 

@@ -11,7 +11,7 @@ from time import sleep
 
 import requests
 
-from versions import LATEST_VERSION, Version, is_supported
+from autofish.versions import LATEST_VERSION, Version, is_supported
 
 BURGER_ENDPOINT = "https://pokechu22.github.io/Burger/{version}.json"
 

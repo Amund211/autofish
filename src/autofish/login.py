@@ -5,7 +5,7 @@ from json.decoder import JSONDecodeError
 from minecraft import authentication
 from minecraft.exceptions import YggdrasilError
 
-from realmip import loop_realm_address
+from autofish.realmip import loop_realm_address
 
 
 def get_credentials(username=None):

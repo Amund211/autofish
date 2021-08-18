@@ -1,6 +1,6 @@
 import toml
 
-from versions import LATEST_RELEASE_VERSION
+from autofish.versions import LATEST_RELEASE_VERSION
 
 DEFAULT_OPTIONS = {
     "profile_path": "profile.json",

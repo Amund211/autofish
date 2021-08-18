@@ -1,4 +1,4 @@
-__pycache__/
+**/__pycache__/
 gamedata.json
 profile.json
 profiles/
@@ -6,3 +6,5 @@ config.toml
 configs/
 logs/
 venv/
+dist/
+src/*.egg-info/
