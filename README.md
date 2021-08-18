@@ -18,7 +18,6 @@ With this change, however, the script is doing something which is impossible wit
 To install autofish make sure you have:
 1. [git](https://git-scm.com/) (for cloning the repository)
 1. [Python](https://www.python.org/downloads/)
-1. Pipenv (```pip install pipenv```)
 
 First clone the repository:
 ```shell
@@ -27,17 +26,21 @@ git clone https://github.com/Amund211/autofish/
 And then create the virtual environment:
 ```shell
 cd autofish
-pipenv sync
+python3 -m venv venv
+source venv/bin/activate  # Or the equivalent for your shell
+pip install -r requirements.txt
 ```
 
 Copy one of the configuration-files to ```config.toml``` and edit it to your needs.
 
 ## Usage
 To properly run this application you must make sure that the script is running under the virtual environment.
-A simple way of doing this is to run
 ```shell
-pipenv run fish
+source venv/bin/activate  # Or the equivalent for your shell
+python autofish.py
 ```
+
+For how to activate the environment on different shells see [the venv docs](https://docs.python.org/3/library/venv.html).
 
 To start fishing you need to:
 1. Get into a safe spot
@@ -65,7 +68,8 @@ Note that this will not change untracked files, like `config.toml`, `profile.jso
 
 After this you should update the virtual environment to make sure you have the latest version of `pyCraft`:
 ```shell
-pipenv sync
+source venv/bin/activate  # Or the equivalent for your shell
+pip install -r requirements.txt
 ```
 
 ## Notes
@@ -84,6 +88,8 @@ This makes it weak to:
 1. Other people fishing near you
 
 ### Authentication
+**NOTE: Microsoft authentification is currently unsupported**
+
 This application handles authentication just like the vanilla minecraft client, and does not store your password.
 You may not always need to enter your password to authenticate; this is because the application stores an accesstoken, which is used instead of your password.
 This is the same reason that you do not need to log in every time you open minecraft.

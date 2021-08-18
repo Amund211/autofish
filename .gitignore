@@ -5,3 +5,4 @@ profiles/
 config.toml
 configs/
 logs/
+venv/
