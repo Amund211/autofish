@@ -37,7 +37,7 @@ Copy one of the configuration-files to ```config.toml``` and edit it to your nee
 To properly run this application you must make sure that the script is running under the virtual environment.
 ```shell
 source venv/bin/activate  # Or the equivalent for your shell
-python autofish.py
+python -m autofish
 ```
 
 For how to activate the environment on different shells see [the venv docs](https://docs.python.org/3/library/venv.html).
