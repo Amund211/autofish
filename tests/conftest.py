@@ -1,11 +1,8 @@
-import hashlib
 import json
 import os
 import shutil
 import subprocess
-import sys
 import time
-from dataclasses import dataclass
 from pathlib import Path
 
 import pytest
@@ -14,27 +11,8 @@ from mcrcon import MCRcon
 
 from autofish.versions import LATEST_VERSION
 
-# Args passed to java for running the minecraft server
-DEFAULT_JAVA_ARGS = []
-
-# Params used for spinning up servers for testing
-# NOTE: Must match those in server.properties
-RCON_PASSWORD = "autofish-testing"
-RCON_PORT = 25575
-MINECRAFT_PORT = 25565
-
-
-@dataclass
-class Server:
-    host: str
-    port: int
-    rcon_port: int
-    rcon_password: str
-    version: str
-
-
-class InvalidVersionError(ValueError):
-    pass
+from .constants import MINECRAFT_PORT, RCON_PASSWORD, RCON_PORT
+from .helpers import InvalidVersionError, Server, download_file, ensure_directory_exists
 
 
 def pytest_addoption(parser):
@@ -51,7 +29,7 @@ def pytest_addoption(parser):
     parser.addoption(
         "--arg",
         action="append",
-        default=DEFAULT_JAVA_ARGS,
+        default=[],
         help="list of arguments passed to java when running the server",
     )
 
@@ -69,26 +47,6 @@ def pytest_generate_tests(metafunc):
             metafunc.config.getoption("server", f"version:{LATEST_VERSION}"),
             scope="session",
         )
-
-
-def download_file(url, path, chunk_size=128, sha1=False):
-    print(f"Downloading {url}", file=sys.stderr)
-    m = hashlib.sha1() if sha1 else None
-    r = requests.get(url, stream=True)
-
-    with path.open("wb") as file:
-        for chunk in r.iter_content(chunk_size=chunk_size):
-            file.write(chunk)
-            if sha1:
-                m.update(chunk)
-
-    print("\tDownload complete", file=sys.stderr)
-    return m.digest() if sha1 else None
-
-
-def ensure_directory_exists(path):
-    if not path.is_dir():
-        path.mkdir(exist_ok=True)
 
 
 @pytest.fixture(scope="session")
