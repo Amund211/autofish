@@ -27,6 +27,13 @@ def pytest_addoption(parser):
     )
 
     parser.addoption(
+        "--gui",
+        action="store_true",
+        default=[],
+        help="open the gui",
+    )
+
+    parser.addoption(
         "--arg",
         action="append",
         default=[],
@@ -104,6 +111,7 @@ def version_manifest(version_manifest_path, version_manifest_url):
 
 @pytest.fixture(scope="session")
 def server(
+    request,
     server_config,
     java_args,
     version_manifest,
@@ -155,12 +163,14 @@ def server(
         shutil.copy(eula_path, run_dir)
         # Start server
         os.chdir(str(run_dir))
+
+        show_gui = request.config.getoption("gui")
         server_process = subprocess.Popen(
             (
                 "java",
                 "-jar",
                 str(run_dir.joinpath(server_path.name)),
-                "nogui",
+                *(() if show_gui else ("nogui",)),
                 *java_args,
             )
         )
