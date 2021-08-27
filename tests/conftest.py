@@ -173,9 +173,21 @@ def server(
                 str(run_dir.joinpath(server_path.name)),
                 *(() if show_gui else ("nogui",)),
                 *java_args,
-            )
+            ),
+            stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE,
+            text=True,
         )
-        # TODO: Read from stdout of the server until we know it has started
+
+        # Wait for the server to start
+        while "[Server thread/INFO]: RCON running on" not in (
+            line := server_process.stdout.readline()
+        ):
+            if (
+                "[Server thread/ERROR]: Exception stopping the server" in line
+                or "[Server thread/WARN]: **** FAILED TO BIND TO PORT!" in line
+            ):
+                raise RuntimeError("Failed to start the server")
 
         yield Server(
             host="localhost",
@@ -185,7 +197,7 @@ def server(
             version=requested_version,
         )
         # Shut down server
-        pass
+        server_process.communicate("stop")
 
 
 @pytest.fixture()
