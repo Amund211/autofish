@@ -22,7 +22,8 @@ def pytest_addoption(parser):
         default=[],
         help=(
             "list of servers to test, either 'version:<versionstring>' or "
-            "'server:<host:port:rcon_port:rcon_password:version>'"
+            "'server:<host:port:rcon_port:rcon_password:version>'."
+            "RCon and offline mode must be enabled for tests to run"
         ),
     )
 
