@@ -3,3 +3,4 @@
 RCON_PASSWORD = "autofish-testing"
 RCON_PORT = 25575
 MINECRAFT_PORT = 25565
+FISHING_USERNAME = "testfisherman"

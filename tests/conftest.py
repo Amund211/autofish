@@ -11,7 +11,7 @@ from mcrcon import MCRcon
 
 from autofish.versions import LATEST_VERSION
 
-from .constants import MINECRAFT_PORT, RCON_PASSWORD, RCON_PORT
+from .constants import FISHING_USERNAME, MINECRAFT_PORT, RCON_PASSWORD, RCON_PORT
 from .helpers import InvalidVersionError, Server, download_file, ensure_directory_exists
 
 
@@ -203,24 +203,28 @@ def server(
 @pytest.fixture()
 def setup_spawn(server):
     # Do some rcon magic to fix the setup
-    with MCRcon(server.host, server.password, server.port) as mcr:
+    with MCRcon(server.host, server.rcon_password, server.rcon_port) as mcr:
         # Set world spawn so that the set area is loaded
-        mcr.command("/setworldspawn 0 60 0")
+        mcr.command("/setworldspawn 0 254 0")
 
-        mcr.command("/gamerule doMobSpawning false")
+        mcr.command("/weather rain")
         mcr.command("/gamerule doDaylightCycle false")
         mcr.command("/time set 18000")
-        mcr.command("/clear @a")
         mcr.command("/kill @e[type=!player]")
         mcr.command("/kill @e[type=!player]")  # kill any dropped items
+        mcr.command(f"/clear {FISHING_USERNAME}")
 
         # Create a hallway where we can perform our tests
-        mcr.command("/fill -1 59 -1 10 62 1 minecraft:glass")
-        mcr.command("/fill 0 60 0 9 61 0 minecraft:air")
-        mcr.command("/fill 0 60 0 9 60 0 minecraft:water")
+        mcr.command("/fill -1 59 -1 10 255 1 minecraft:glass")
+        mcr.command("/fill 0 254 0 9 255 0 minecraft:air")
+        mcr.command("/fill 0 254 0 9 254 0 minecraft:water")
+        mcr.command(f"/tp {FISHING_USERNAME} 0 254 0 -180 0")
 
 
 @pytest.fixture()
-def working_fishing_setup(server):
+def working_fishing_setup(server, setup_spawn):
     # Do some rcon magic to fix the setup
-    pass
+    with MCRcon(server.host, server.rcon_password, server.rcon_port) as mcr:
+        # Set world spawn so that the set area is loaded
+        mcr.command(f"/give {FISHING_USERNAME} minecraft:fishing_rod")
+        mcr.command(f"/enchant {FISHING_USERNAME} minecraft:lure 3")
