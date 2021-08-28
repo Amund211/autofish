@@ -31,7 +31,7 @@ def download_file(url, path, chunk_size=128, sha1=False):
                 m.update(chunk)
 
     print("\tDownload complete", file=sys.stderr)
-    return m.digest() if sha1 else None
+    return m.hexdigest() if sha1 else None
 
 
 def ensure_directory_exists(path: Path):
