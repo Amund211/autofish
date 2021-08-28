@@ -52,7 +52,7 @@ def pytest_generate_tests(metafunc):
     if "server_config" in metafunc.fixturenames:
         metafunc.parametrize(
             "server_config",
-            metafunc.config.getoption("server", f"version:{LATEST_VERSION}"),
+            metafunc.config.getoption("server") or (f"version:{LATEST_VERSION}",),
             scope="session",
         )
 
