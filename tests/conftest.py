@@ -14,6 +14,8 @@ from autofish.versions import LATEST_VERSION
 from .constants import FISHING_USERNAME, MINECRAFT_PORT, RCON_PASSWORD, RCON_PORT
 from .helpers import InvalidVersionError, Server, download_file, ensure_directory_exists
 
+DEFAULT_SERVER_CONFIGS = (f"version:{LATEST_VERSION}",)
+
 
 def pytest_addoption(parser):
     parser.addoption(
@@ -52,7 +54,7 @@ def pytest_generate_tests(metafunc):
     if "server_config" in metafunc.fixturenames:
         metafunc.parametrize(
             "server_config",
-            metafunc.config.getoption("server") or (f"version:{LATEST_VERSION}",),
+            metafunc.config.getoption("server") or DEFAULT_SERVER_CONFIGS,
             scope="session",
         )
 
