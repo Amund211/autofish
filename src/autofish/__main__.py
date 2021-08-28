@@ -1,21 +1,23 @@
-#! /usr/bin/env python3
-
 import sys
 from argparse import ArgumentParser, FileType
 from datetime import datetime
 from time import sleep
 
-from config import read_config
-from fishing import setup_connection, use_item
-from gamedata import get_bobber_splash_id
-from login import (
+from autofish.config import read_config
+from autofish.fishing import setup_connection, use_item
+from autofish.gamedata import get_bobber_splash_id
+from autofish.login import (
     authenticate_user,
     create_auth_token,
     get_host_address,
     read_profile,
     update_profile,
 )
-from utils import print_timestamped
+from autofish.utils import print_timestamped
+
+
+class EndFishingSession(BaseException):
+    pass
 
 
 def get_options():
@@ -165,11 +167,13 @@ def main():
                     if durability_count >= OPTIONS["durability_threshold"]:
                         # Log out to save the rod
                         print_timestamped(
-                            f"Too many timeouts; rod has, at worst, taken ~{durability_count} "
+                            "Too many timeouts; rod has, at worst, taken "
+                            f"~{durability_count} "
                             "points of durability. Logging out to save it."
                         )
+
                         # Ugly hack to display results of session before exiting
-                        raise KeyboardInterrupt
+                        raise EndFishingSession
 
                     print_timestamped(
                         f"Timed out; more than {OPTIONS['fish_timeout']} seconds "
@@ -186,7 +190,7 @@ def main():
                     # The rod cannot be repaired past fully repaired
                     durability_count = max(0, durability_count - 2)
 
-    except KeyboardInterrupt:
+    except (KeyboardInterrupt, EndFishingSession):
         print_timestamped("Ending session")
         state["connection"].disconnect()
 
