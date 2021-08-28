@@ -1,8 +1,8 @@
 import hashlib
 import os
-import signal
 import subprocess
 import sys
+from collections import deque
 from copy import deepcopy
 from dataclasses import dataclass
 from pathlib import Path
@@ -65,8 +65,7 @@ def start_client(
         toml.dump(config, config_file)
 
     return subprocess.Popen(
-        ("python", "-m", "autofish", "--config", config_path),
-        stdin=subprocess.PIPE,
+        ("python", "-u", "-m", "autofish", "--config", config_path),
         stdout=subprocess.PIPE,
         text=True,
     )
@@ -75,12 +74,24 @@ def start_client(
 def wait_for_login(client_process):
     """Wait until the user has logged in"""
     # Read from stdout until the process claims to have logged in
-    while "Connection established" not in (line := client_process.stdout.readline()):
-        print(f"Client output: {line}")
-        pass
+    print("Waiting for login rightn now")
+    output = deque()
+    while client_process.poll() is None and "Connection established" not in (
+        line := client_process.stdout.readline()
+    ):
+        if line:
+            output.append(line)
+
+    client_process.poll()
+    if client_process.returncode is not None:
+        client_output = "\n\t".join(output)
+        raise RuntimeError(
+            f"Client process exited with code {client_process.returncode}."
+            f"{client_output}"
+        )
 
 
 def stop_client(client_process):
-    """Stop the client process by sending sigint"""
-    client_process.send_signal(signal.SIGINT)
+    """Stop the client process and return remaining output"""
+    client_process.terminate()
     return client_process.communicate()
