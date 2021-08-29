@@ -9,8 +9,9 @@ from pathlib import Path
 
 import requests
 import toml
+from mcrcon import MCRcon
 
-from .constants import DEFAULT_CONFIG
+from .constants import DEFAULT_CONFIG, FISHING_USERNAME
 
 
 class InvalidVersionError(ValueError):
@@ -74,7 +75,6 @@ def start_client(
 def wait_for_login(client_process):
     """Wait until the user has logged in"""
     # Read from stdout until the process claims to have logged in
-    print("Waiting for login rightn now")
     output = deque()
     while client_process.poll() is None and "Connection established" not in (
         line := client_process.stdout.readline()
@@ -89,6 +89,20 @@ def wait_for_login(client_process):
             f"Client process exited with code {client_process.returncode}."
             f"{client_output}"
         )
+
+
+def setup_for_fishing(tmp_path, server):
+    """Log in to receive items and get teleported"""
+    client_process = start_client(tmp_path, server)
+    wait_for_login(client_process)
+
+    with MCRcon(server.host, server.rcon_password, server.rcon_port) as mcr:
+        mcr.command(f"/clear {FISHING_USERNAME}")
+        mcr.command(f"/tp {FISHING_USERNAME} 0 253 0 -90 0")
+        mcr.command(f"/give {FISHING_USERNAME} minecraft:fishing_rod")
+        mcr.command(f"/enchant {FISHING_USERNAME} minecraft:lure 3")
+
+    stop_client(client_process)
 
 
 def stop_client(client_process):
