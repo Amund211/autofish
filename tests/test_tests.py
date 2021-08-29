@@ -36,6 +36,16 @@ def test_messages(server, tmp_path, should_greet, should_sleep):
     did_message = ("did", "did not")
     should_message = ("should not", "should")
 
+    # Clear output from other tests
+    with MCRcon(server.host, server.rcon_password, server.rcon_port) as mcr:
+        mcr.command(f"/say START-{SENTINEL_STRING}")
+
+    while server.process.poll() is None and f"[Rcon] START-{SENTINEL_STRING}" not in (
+        line := server.process.stdout.readline()
+    ):
+        pass
+
+    # Start the client
     options = {"sleep_helper": should_sleep}
     if not should_greet:
         options["greet_message"] = ""  # Set to empty string to disable greeting
