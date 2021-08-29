@@ -7,6 +7,7 @@ from .helpers import setup_for_fishing, start_client, stop_client, wait_for_logi
 
 
 def test_login(server, tmp_path):
+    """Assert that the client is able to log in properly"""
     client_process = start_client(tmp_path, server)
     wait_for_login(client_process)
 
