@@ -50,7 +50,11 @@ def ensure_directory_exists(path: Path):
 
 
 def start_client(
-    client_dir: Path, server: Server, host_override={}, options_override={}
+    client_dir: Path,
+    server: Server,
+    host_override={},
+    options_override={},
+    capture_output=True,
 ):
     """Start a client process with the given config"""
     config = deepcopy(DEFAULT_CONFIG)
@@ -69,7 +73,7 @@ def start_client(
 
     return subprocess.Popen(
         ("python", "-u", "-m", "autofish", "--config", config_path),
-        stdout=subprocess.PIPE,
+        stdout=subprocess.PIPE if capture_output else None,
         text=True,
     )
 
