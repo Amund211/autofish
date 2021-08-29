@@ -13,7 +13,7 @@ jobs:
         python-version: 3.9
     - name: Install dependencies
       run: |
-        python -m pip install --upgrade pip
+        python -m ensurepip --upgrade
         pip install black flake8 isort>=5.0
     - name: Check for formatting/linting errors
       run: |
