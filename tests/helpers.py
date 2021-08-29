@@ -84,8 +84,7 @@ def wait_for_login(client_process):
         if line:
             output.append(line)
 
-    client_process.poll()
-    if client_process.returncode is not None:
+    if client_process.poll() is not None:
         client_output = "\n\t".join(output)
         raise RuntimeError(
             f"Client process exited with code {client_process.returncode}."
