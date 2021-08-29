@@ -1,0 +1,33 @@
+name: Python testing
+
+on: [push, workflow_dispatch]
+
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macOS-latest]
+        minecraft_version: [1.7.10, 1.8.9, 1.9.4, 1.10.2, 1.11.2, 1.12.2, 1.13.2, 1.14.4, 1.15.2, 1.16.4]
+        python_version: [3.6, 3.7, 3.8, 3.9]
+    defaults:
+      run:
+        shell: bash  # For `source`
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python_version }}
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        python -m venv venv
+        source venv/bin/activate
+        pip install -r requirements.dev.txt
+
+    - name: Run tests
+      run: |
+        source venv/bin/activate
+        pytest --server version:${{ matrix.minecraft_version }}
