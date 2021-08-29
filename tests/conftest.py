@@ -226,3 +226,10 @@ def setup_spawn(server):
         mcr.command("/fill 0 253 0 9 255 0 minecraft:air")
         mcr.command("/fill 0 253 0 9 253 0 minecraft:water")
         mcr.command("/setblock 0 255 0 minecraft:glass")
+
+
+@pytest.fixture(autouse=True)
+def print_running_test(request, server):
+    with MCRcon(server.host, server.rcon_password, server.rcon_port) as mcr:
+        # Set world spawn so that the set area is loaded
+        mcr.command(f"/say Running test '{request.node.name}'")
