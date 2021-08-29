@@ -183,14 +183,19 @@ def server(
         )
 
         # Wait for the server to start
-        while "[Server thread/INFO]: RCON running on" not in (
-            line := server_process.stdout.readline()
+        while (
+            server_process.poll() is None
+            and "[Server thread/INFO]: RCON running on"
+            not in (line := server_process.stdout.readline())
         ):
-            if (
-                "[Server thread/ERROR]: Exception stopping the server" in line
-                or "[Server thread/WARN]: **** FAILED TO BIND TO PORT!" in line
-            ):
-                raise RuntimeError("Failed to start the server")
+            if "[Server thread/WARN]: **** FAILED TO BIND TO PORT!" in line:
+                raise RuntimeError(
+                    "Failed to start the server. Do you have another server running "
+                    f"on port {MINECRAFT_PORT}?"
+                )
+
+        if server_process.poll() is not None:
+            raise RuntimeError("Failed to start the server")
 
         yield Server(
             host="localhost",
