@@ -132,6 +132,7 @@ def server(
             rcon_port=int(rcon_port),
             rcon_password=rcon_password,
             version=version,
+            process=None,
         )
     else:
         requested_version = server_config[8:]
@@ -197,6 +198,7 @@ def server(
             rcon_port=RCON_PORT,
             rcon_password=RCON_PASSWORD,
             version=requested_version,
+            process=server_process,
         )
         # Shut down server
         server_process.communicate("stop")

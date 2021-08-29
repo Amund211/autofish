@@ -6,6 +6,7 @@ from collections import deque
 from copy import deepcopy
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Optional
 
 import requests
 import toml
@@ -25,6 +26,7 @@ class Server:
     rcon_port: int
     rcon_password: str
     version: str
+    process: Optional[subprocess.Popen]
 
 
 def download_file(url, path, chunk_size=128, sha1=False):
