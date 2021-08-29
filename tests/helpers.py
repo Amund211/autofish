@@ -92,14 +92,16 @@ def wait_for_login(client_process):
         )
 
 
-def setup_for_fishing(tmp_path, server):
+def setup_for_fishing(tmp_path, server, water=True):
     """Log in to receive items and get teleported"""
     client_process = start_client(tmp_path, server)
     wait_for_login(client_process)
 
+    height = 253 if water else 250
+
     with MCRcon(server.host, server.rcon_password, server.rcon_port) as mcr:
         mcr.command(f"/clear {FISHING_USERNAME}")
-        mcr.command(f"/tp {FISHING_USERNAME} 0 253 0 -90 0")
+        mcr.command(f"/tp {FISHING_USERNAME} 0 {height} 0 -90 0")
         mcr.command(f"/give {FISHING_USERNAME} minecraft:fishing_rod")
         mcr.command(f"/enchant {FISHING_USERNAME} minecraft:lure 3")
 

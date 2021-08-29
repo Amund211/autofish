@@ -227,6 +227,10 @@ def setup_spawn(server):
         mcr.command("/fill 0 253 0 9 253 0 minecraft:water")
         mcr.command("/setblock 0 255 0 minecraft:glass")
 
+        # Create a hallway below for tests without water
+        mcr.command("/fill -1 249 -1 10 252 1 minecraft:glass")
+        mcr.command("/fill 0 250 0 9 251 0 minecraft:air")
+
 
 @pytest.fixture(autouse=True)
 def print_running_test(request, server):
