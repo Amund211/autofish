@@ -89,10 +89,60 @@ def test_messages(server, tmp_path, should_greet, should_sleep):
     stop_client(client_process)
 
 
-def test_catches_fish(server, tmp_path, setup_spawn):
-    setup_for_fishing(tmp_path, server)
+def test_bobber_cast_on_login(server, tmp_path, setup_spawn):
+    setup_for_fishing(tmp_path, server, water=False)
+
+    with MCRcon(server.host, server.rcon_password, server.rcon_port) as mcr:
+        response = mcr.command("/execute as @e[type=fishing_bobber] run help")
+
+    assert not response
+
     client_process = start_client(tmp_path, server)
     wait_for_login(client_process)
 
-    # time.sleep(60)
-    print(stop_client(client_process))
+    time.sleep(1)  # Give the server time to receive the rod cast
+
+    with MCRcon(server.host, server.rcon_password, server.rcon_port) as mcr:
+        response = mcr.command("/execute as @e[type=fishing_bobber] run help")
+
+    assert response
+
+    stop_client(client_process)
+
+
+def test_catches_fish(server, tmp_path, setup_spawn):
+    OBJECTIVE_NAME = "fish_caught"
+
+    setup_for_fishing(tmp_path, server)
+
+    with MCRcon(server.host, server.rcon_password, server.rcon_port) as mcr:
+        mcr.command(f"/scoreboard objectives remove {OBJECTIVE_NAME}")
+        mcr.command(
+            f"/scoreboard objectives add {OBJECTIVE_NAME} "
+            "minecraft.custom:minecraft.fish_caught"
+        )
+        mcr.command(f"/scoreboard objectives setdisplay sidebar {OBJECTIVE_NAME}")
+
+        client_process = start_client(tmp_path, server)
+        wait_for_login(client_process)
+
+        # Poll the amount of fish caught once every tick for 60 seconds
+        for i in range(20 * 60):
+            response = mcr.command(
+                f"/scoreboard players get {FISHING_USERNAME} {OBJECTIVE_NAME}"
+            )
+
+            # Before the player has fished, you can't get their value for the objective
+            if (
+                f"Can't get value of {OBJECTIVE_NAME} for {FISHING_USERNAME}"
+                not in response
+            ):
+                # Make sure we get the expected output
+                assert f"{FISHING_USERNAME} has 1 [{OBJECTIVE_NAME}]" in response
+                break
+
+            time.sleep(1 / 20)
+
+    stdout, stderr = stop_client(client_process)
+
+    assert "Caught one!" in stdout
