@@ -10,8 +10,15 @@ from .helpers import setup_for_fishing, start_client, stop_client, wait_for_logi
 
 def test_login(server, tmp_path):
     """Assert that the client is able to log in properly"""
+    with MCRcon(server.host, server.rcon_password, server.rcon_port) as mcr:
+        response = mcr.command("/list")
+
+    assert FISHING_USERNAME not in response
+
     client_process = start_client(tmp_path, server)
     wait_for_login(client_process)
+
+    time.sleep(1)  # Ensure we have time to login
 
     with MCRcon(server.host, server.rcon_password, server.rcon_port) as mcr:
         response = mcr.command("/list")
