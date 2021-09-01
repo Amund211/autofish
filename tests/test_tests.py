@@ -5,7 +5,7 @@ import pytest
 from mcrcon import MCRcon
 
 from .constants import DEFAULT_CONFIG, FISHING_USERNAME
-from .helpers import setup_for_fishing, start_client, stop_client, wait_for_login
+from .helpers import ManagedClient, setup_for_fishing
 
 
 def test_login(server, tmp_path):
@@ -15,17 +15,13 @@ def test_login(server, tmp_path):
 
     assert FISHING_USERNAME not in response
 
-    client_process = start_client(tmp_path, server)
-    wait_for_login(client_process)
+    with ManagedClient(tmp_path, server):
+        time.sleep(1)  # Ensure we have time to login
 
-    time.sleep(1)  # Ensure we have time to login
+        with MCRcon(server.host, server.rcon_password, server.rcon_port) as mcr:
+            response = mcr.command("/list")
 
-    with MCRcon(server.host, server.rcon_password, server.rcon_port) as mcr:
-        response = mcr.command("/list")
-
-    assert FISHING_USERNAME in response
-
-    stop_client(client_process)
+        assert FISHING_USERNAME in response
 
 
 @pytest.mark.parametrize("should_greet", (False, True))
@@ -57,43 +53,37 @@ def test_messages(server, tmp_path, should_greet, should_sleep):
     if not should_greet:
         options["greet_message"] = ""  # Set to empty string to disable greeting
 
-    client_process = start_client(tmp_path, server, options_override=options)
-    wait_for_login(client_process)
+    with ManagedClient(tmp_path, server, options_override=options):
+        time.sleep(1)  # Give the server time to receive the chat packets
 
-    time.sleep(1)  # Give the server time to receive the chat packets
+        with MCRcon(server.host, server.rcon_password, server.rcon_port) as mcr:
+            mcr.command(f"/say {SENTINEL_STRING}")
 
-    with MCRcon(server.host, server.rcon_password, server.rcon_port) as mcr:
-        mcr.command(f"/say {SENTINEL_STRING}")
+        sent_messages = deque()
+        while server.process.poll() is None and f"[Rcon] {SENTINEL_STRING}" not in (
+            line := server.process.stdout.readline()
+        ):
+            if f"<{FISHING_USERNAME}>" in line:
+                sent_messages.append(line)
 
-    sent_messages = deque()
-    while server.process.poll() is None and f"[Rcon] {SENTINEL_STRING}" not in (
-        line := server.process.stdout.readline()
-    ):
-        if f"<{FISHING_USERNAME}>" in line:
-            sent_messages.append(line)
+        def message_has_been_sent(messages, message):
+            return any(message in m for m in messages)
 
-    def message_has_been_sent(messages, message):
-        return any(message in m for m in messages)
+        if should_greet != message_has_been_sent(
+            sent_messages, DEFAULT_CONFIG["options"]["greet_message"]
+        ):
+            raise RuntimeError(
+                f"Client process {did_message[should_greet]} greet the server when it "
+                f"{should_message[should_greet]} have"
+            )
 
-    if should_greet != message_has_been_sent(
-        sent_messages, DEFAULT_CONFIG["options"]["greet_message"]
-    ):
-        stop_client(client_process)
-        raise RuntimeError(
-            f"Client process {did_message[should_greet]} greet the server when it "
-            f"{should_message[should_greet]} have"
-        )
-
-    if should_sleep != message_has_been_sent(
-        sent_messages, DEFAULT_CONFIG["options"]["sleep_message"]
-    ):
-        stop_client(client_process)
-        raise RuntimeError(
-            f"Client process {did_message[should_sleep]} inform the server of the "
-            f"sleep helper when it {should_message[should_sleep]} have"
-        )
-
-    stop_client(client_process)
+        if should_sleep != message_has_been_sent(
+            sent_messages, DEFAULT_CONFIG["options"]["sleep_message"]
+        ):
+            raise RuntimeError(
+                f"Client process {did_message[should_sleep]} inform the server of the "
+                f"sleep helper when it {should_message[should_sleep]} have"
+            )
 
 
 def test_bobber_cast_on_login(server, tmp_path, setup_spawn):
@@ -104,17 +94,13 @@ def test_bobber_cast_on_login(server, tmp_path, setup_spawn):
 
     assert not response
 
-    client_process = start_client(tmp_path, server)
-    wait_for_login(client_process)
+    with ManagedClient(tmp_path, server):
+        time.sleep(1)  # Give the server time to receive the rod cast
 
-    time.sleep(1)  # Give the server time to receive the rod cast
+        with MCRcon(server.host, server.rcon_password, server.rcon_port) as mcr:
+            response = mcr.command("/execute as @e[type=fishing_bobber] run help")
 
-    with MCRcon(server.host, server.rcon_password, server.rcon_port) as mcr:
-        response = mcr.command("/execute as @e[type=fishing_bobber] run help")
-
-    assert response
-
-    stop_client(client_process)
+        assert response
 
 
 def test_catches_fish(server, tmp_path, setup_spawn):
@@ -130,26 +116,24 @@ def test_catches_fish(server, tmp_path, setup_spawn):
         )
         mcr.command(f"/scoreboard objectives setdisplay sidebar {OBJECTIVE_NAME}")
 
-        client_process = start_client(tmp_path, server)
-        wait_for_login(client_process)
+        with ManagedClient(tmp_path, server) as client_process:
+            # Poll the amount of fish caught once every tick for 60 seconds
+            for i in range(20 * 60):
+                response = mcr.command(
+                    f"/scoreboard players get {FISHING_USERNAME} {OBJECTIVE_NAME}"
+                )
 
-        # Poll the amount of fish caught once every tick for 60 seconds
-        for i in range(20 * 60):
-            response = mcr.command(
-                f"/scoreboard players get {FISHING_USERNAME} {OBJECTIVE_NAME}"
-            )
+                # Can't get the value for the objective before the player has caught one
+                if (
+                    f"Can't get value of {OBJECTIVE_NAME} for {FISHING_USERNAME}"
+                    not in response
+                ):
+                    # Make sure we get the expected output
+                    assert f"{FISHING_USERNAME} has 1 [{OBJECTIVE_NAME}]" in response
+                    break
 
-            # Before the player has fished, you can't get their value for the objective
-            if (
-                f"Can't get value of {OBJECTIVE_NAME} for {FISHING_USERNAME}"
-                not in response
-            ):
-                # Make sure we get the expected output
-                assert f"{FISHING_USERNAME} has 1 [{OBJECTIVE_NAME}]" in response
-                break
+                time.sleep(1 / 20)
 
-            time.sleep(1 / 20)
-
-    stdout, stderr = stop_client(client_process)
+    stdout, stderr = client_process.communicate()
 
     assert "Caught one!" in stdout

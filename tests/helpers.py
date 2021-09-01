@@ -122,3 +122,31 @@ def stop_client(client_process):
     """Stop the client process and return remaining output"""
     client_process.terminate()
     return client_process.communicate()
+
+
+@dataclass
+class ManagedClient:
+    """
+    Context manager handling setup and shutdown of fishing clients
+    """
+
+    client_dir: Path
+    server: Server
+    host_override: Optional[dict] = None
+    options_override: Optional[dict] = None
+    capture_output: bool = True
+    process: Optional[subprocess.Popen] = None
+
+    def __enter__(self):
+        self.process = start_client(
+            client_dir=self.client_dir,
+            server=self.server,
+            host_override=self.host_override or {},
+            options_override=self.options_override or {},
+            capture_output=self.capture_output,
+        )
+        wait_for_login(self.process)
+        return self.process
+
+    def __exit__(self, *args, **kwargs):
+        self.process.terminate()
