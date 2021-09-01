@@ -23,7 +23,10 @@ First clone the repository:
 ```shell
 git clone https://github.com/Amund211/autofish/
 ```
-And then create the virtual environment:
+
+And then create the virtual environment with either
+
+Bash (linux/mac):
 ```shell
 cd autofish
 python3 -m venv venv
@@ -31,16 +34,33 @@ source venv/bin/activate  # Or the equivalent for your shell
 pip install -r requirements.txt
 ```
 
+Powershell (windows):
+```shell
+cd autofish
+py -3 -m venv venv
+venv/Scripts/Activate.ps1
+pip install -r requirements.txt
+```
+
+For how to activate the environment on different shells see [the venv docs](https://docs.python.org/3/library/venv.html).
+
 Copy one of the configuration-files to ```config.toml``` and edit it to your needs.
 
 ## Usage
 To properly run this application you must make sure that the script is running under the virtual environment.
+
+
+Bash (linux/mac):
 ```shell
-source venv/bin/activate  # Or the equivalent for your shell
+source venv/bin/activate
 python -m autofish
 ```
 
-For how to activate the environment on different shells see [the venv docs](https://docs.python.org/3/library/venv.html).
+Powershell (windows):
+```shell
+venv/Scripts/Activate.ps1
+py -m autofish
+```
 
 To start fishing you need to:
 1. Get into a safe spot
