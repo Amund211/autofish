@@ -3,6 +3,7 @@ import os
 import shutil
 import subprocess
 import time
+from collections import deque
 from pathlib import Path
 
 import pytest
@@ -183,15 +184,25 @@ def server(
         )
 
         # Wait for the server to start
-        while (
-            server_process.poll() is None
-            and "INFO]: RCON running on"
-            not in (line := server_process.stdout.readline())
+        start_time = time.time()
+        server_output = deque(maxlen=1000)
+        while server_process.poll() is None and "INFO]: RCON running on" not in (
+            line := server_process.stdout.readline()
         ):
+            server_output.append(line)
             if "[Server thread/WARN]: **** FAILED TO BIND TO PORT!" in line:
                 raise RuntimeError(
                     "Failed to start the server. Do you have another server running "
                     f"on port {MINECRAFT_PORT}?"
+                )
+            elif time.time() - start_time > 60:
+                server_process.terminate()
+                remaining_stdout, stderr = server_process.communicate()
+                stdout = "\n\t\t".join(server_output) + f"\n\t\t{remaining_stdout}"
+                raise RuntimeError(
+                    f"Failed to start the server. Timed out."
+                    f"\n\tStdout: {stdout}"
+                    f"\n\tStderr: {stderr}"
                 )
 
         if server_process.poll() is not None:
