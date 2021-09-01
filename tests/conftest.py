@@ -195,7 +195,7 @@ def server(
                     "Failed to start the server. Do you have another server running "
                     f"on port {MINECRAFT_PORT}?"
                 )
-            elif time.time() - start_time > 60:
+            elif time.time() - start_time > 300:
                 server_process.terminate()
                 remaining_stdout, stderr = server_process.communicate()
                 stdout = "\n\t\t".join(server_output) + f"\n\t\t{remaining_stdout}"
