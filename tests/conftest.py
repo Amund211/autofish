@@ -185,7 +185,7 @@ def server(
         # Wait for the server to start
         while (
             server_process.poll() is None
-            and "[Server thread/INFO]: RCON running on"
+            and "INFO]: RCON running on"
             not in (line := server_process.stdout.readline())
         ):
             if "[Server thread/WARN]: **** FAILED TO BIND TO PORT!" in line:
