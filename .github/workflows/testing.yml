@@ -19,7 +19,7 @@ jobs:
           - os: macOS-latest
             minecraft_version: 1.16.4
             python_version: 3.9
-          # Test with older python version
+          # Test with older python versions
           - os: ubuntu-latest
             minecraft_version: 1.16.4
             python_version: 3.6
