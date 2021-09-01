@@ -71,9 +71,12 @@ def start_client(
     with open(config_path, "w") as config_file:
         toml.dump(config, config_file)
 
+    output_pipe = subprocess.PIPE if capture_output else None
+
     return subprocess.Popen(
         ("python", "-u", "-m", "autofish", "--config", config_path),
-        stdout=subprocess.PIPE if capture_output else None,
+        stdout=output_pipe,
+        stderr=output_pipe,
         text=True,
     )
 
@@ -81,7 +84,7 @@ def start_client(
 def wait_for_login(client_process):
     """Wait until the user has logged in"""
     # Read from stdout until the process claims to have logged in
-    output = deque()
+    output = deque(maxlen=1000)
     while client_process.poll() is None and "Connection established" not in (
         line := client_process.stdout.readline()
     ):
@@ -90,9 +93,12 @@ def wait_for_login(client_process):
 
     if client_process.poll() is not None:
         client_output = "\n\t".join(output)
+        remaining_stdout, stderr = client_process.communicate()
+        stdout = "\n\t\t".join(client_output) + f"\n\t\t{remaining_stdout}"
         raise RuntimeError(
             f"Client process exited with code {client_process.returncode}."
-            f"{client_output}"
+            f"\n\tStdout: {stdout}"
+            f"\n\tStderr: {stderr}"
         )
 
 
