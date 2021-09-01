@@ -9,7 +9,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest]
-        minecraft_version: [1.7.10, 1.8.9, 1.9.4, 1.10.2, 1.11.2, 1.12.2, 18w15a, 1.13.2, 1.14.4, 1.15.2, 1.16.4]
+        minecraft_version: [1.13.2, 1.14.4, 1.15.2, 1.16.4]
         python_version: [3.9]
         include:
           # Test the latest version on windows+mac
