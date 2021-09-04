@@ -13,9 +13,9 @@ jobs:
         python_version: [3.9]
         include:
           # Test the latest version on windows+mac
-          - os: windows-latest
-            minecraft_version: 1.16.4
-            python_version: 3.9
+          #- os: windows-latest
+          #  minecraft_version: 1.16.4
+          #  python_version: 3.9
           - os: macOS-latest
             minecraft_version: 1.16.4
             python_version: 3.9
